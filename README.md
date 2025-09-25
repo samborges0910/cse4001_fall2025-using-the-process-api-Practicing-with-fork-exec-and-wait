@@ -52,44 +52,44 @@ Use the Linux in your CSE4001 container. If you are using macOS, you may use the
 
 
 ```cpp
-// Add your code or answer here. You can also add screenshots showing your program's execution.  
+The initial value of the variable is 100, and in the child process it adds 50, meaning that the final process is 150. After the fork, the child gets a copy of the parents memory, so the change in one process doesn't change the other, meaning the child and parent process can have different values.
 ```
 
 
 2. Write a program that opens a file (with the `open()` system call) and then calls `fork()` to create a new process. Can both the child and parent access the file descriptor returned by `open()`? What happens when they are writing to the file concurrently, i.e., at the same time?
 
 ```cpp
-// Add your code or answer here. You can also add screenshots showing your program's execution.  
+Both the child and parent access the file descriptor returned by open(). If the fork is called after the open file description is created, both the parent and child will be sharing the same open file. If they write at the same time, they can interleave at the byte level or overlap, depending on the timing, causing incorrect text.
 ```
 
 3. Write another program using `fork()`.The child process should print “hello”; the parent process should print “goodbye”. You should try to ensure that the child process always prints first; can you do this without calling `wait()` in the parent?
 
 ```cpp
-// Add your code or answer here. You can also add screenshots showing your program's execution.  
+Using pipe ensures that the child can connect with the parent, so the parent waits for the childs signal before printing.  
 ```
 
 
 4. Write a program that calls `fork()` and then calls some form of `exec()` to run the program `/bin/ls`. See if you can try all of the variants of `exec()`, including (on Linux) `execl()`, `execle()`, `execlp()`, `execv()`, `execvp()`, and `execvpe()`. Why do you think there are so many variants of the same basic call?
 
 ```cpp
-// Add your code or answer here. You can also add screenshots showing your program's execution.  
+The exec() call that should be used depends on the case. Some of them are prefereably to search for paths, while others are better to simulate different environments. 
 ```
 
 5. Now write a program that uses `wait()` to wait for the child process to finish in the parent. What does `wait()` return? What happens if you use `wait()` in the child?
 
 ```cpp
-// Add your code or answer here. You can also add screenshots showing your program's execution.  
+ The wait() command is important because it doesn't matter if the parent runs first, it will wait for the child to finish running, then wait() returns and the parent prints the message. If wait() is inside the child process, it will fail because the child doesn't have a child of its own to wait for.
 ```
 
 6. Write a slight modification of the previous program, this time using `waitpid()` instead of `wait()`. When would `waitpid()` be useful?
 
 ```cpp
-// Add your code or answer here. You can also add screenshots showing your program's execution.  
+waitpid() will be more useful if the parent wants to wait for a specific child, (like if there is more then 1 child), and it will also give the exit status of the child.  
 ```
 
 7. Write a program that creates a child process, and then in the child closes standard output (`STDOUT FILENO`). What happens if the child calls `printf()` to print some output after closing the descriptor?
 
 ```cpp
-// Add your code or answer here. You can also add screenshots showing your program's execution.  
+calling STDOUT() frees up the descriptor and therefore the child wont be able to print anything on the terminal after the descriptor closes.
 ```
 
